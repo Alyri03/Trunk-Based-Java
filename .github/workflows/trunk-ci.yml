@@ -1,0 +1,38 @@
+name: Trunk-Based CI
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-and-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Compilar con Maven
+        run: ./mvnw clean install
+
+      - name: Ejecutar pruebas unitarias
+        run: ./mvnw test
+
+      - name: Hacer merge automático si todo pasa
+        if: success()
+        uses: "peter-evans/enable-pull-request-automerge@v3"
+        with:
+            pull-request-number: ${{ github.event.pull_request.number }}
+            token: ${{ secrets.GITHUB_TOKEN }}
+            merge-method: squash
+
