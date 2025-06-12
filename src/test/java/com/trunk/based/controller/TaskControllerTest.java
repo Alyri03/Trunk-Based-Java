@@ -26,16 +26,43 @@ class TaskControllerTest {
         Task tarea = new Task(null, "Tarea de prueba", false);
 
         // Crear tarea
-        mockMvc.perform(post("/api/tareas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(tarea)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.titulo", is("Tarea de prueba")))
-                .andExpect(jsonPath("$.completado", is(false)));
+       mockMvc.perform(post("/api/tareas")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(tarea)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.titulo", is("Tarea de prueba")))
+        .andExpect(jsonPath("$.completado", is(false)));
+
 
         // Listar tareas
         mockMvc.perform(get("/api/tareas"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
+
+    @Test
+    void testEliminarTarea() throws Exception {
+        Task tarea = new Task(null, "Eliminar esto", false);
+
+        // Crear tarea
+        String response = mockMvc.perform(post("/api/tareas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tarea)))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Task tareaCreada = objectMapper.readValue(response, Task.class);
+
+        // Eliminar la tarea
+        mockMvc.perform(delete("/api/tareas/" + tareaCreada.getId()))
+                .andExpect(status().isNoContent());
+
+        // Verificar que la tarea fue eliminada
+        mockMvc.perform(get("/api/tareas"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
 }
