@@ -47,7 +47,7 @@ class TaskControllerTest {
 
     @Test
     void testListarTareas() throws Exception {
-        Task tarea = new Task(1L, "Ver tarea", true);
+        Task tarea = new Task(1L, "Ver tarea", false);
 
         when(tareaService.listar()).thenReturn(Collections.singletonList(tarea));
 
@@ -55,7 +55,7 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].titulo", is("Ver tarea")))
-                .andExpect(jsonPath("$[0].completado", is(true)));
+                .andExpect(jsonPath("$[0].completado", is(false)));
     }
 
     @Test
