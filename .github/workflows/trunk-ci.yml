@@ -7,13 +7,11 @@ on:
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
   build-and-merge:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Clonar el repositorio
+      - name: Checkout del repositorio
         uses: actions/checkout@v4
 
       - name: Configurar Java 21
@@ -21,6 +19,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+
+      - name: Dar permisos a mvnw
+        run: chmod +x ./mvnw
 
       - name: Compilar con Maven
         run: ./mvnw clean install
@@ -32,7 +33,6 @@ jobs:
         if: success()
         uses: "peter-evans/enable-pull-request-automerge@v3"
         with:
-            pull-request-number: ${{ github.event.pull_request.number }}
-            token: ${{ secrets.GITHUB_TOKEN }}
-            merge-method: squash
-
+          pull-request-number: ${{ github.event.pull_request.number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          merge-method: squash
