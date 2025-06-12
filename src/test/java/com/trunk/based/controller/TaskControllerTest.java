@@ -60,7 +60,6 @@ class TaskControllerTest {
 
     @Test
     void testActualizarTarea() throws Exception {
-        Task original = new Task(1L, "Vieja", false);
         Task actualizada = new Task(1L, "Nueva", true);
 
         when(tareaService.actualizar(any(Long.class), any(Task.class)))
