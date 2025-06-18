@@ -47,11 +47,7 @@ class TaskControllerTest {
 
     @Test
     void testListarTareas() throws Exception {
-<<<<<<< HEAD
-        Task tarea = new Task(1L, "Ver tarea", true);
-=======
         Task tarea = new Task(1L, "Ver tarea", false);
->>>>>>> a5e0d1189bdbee081235eb0ed69246965b840a29
 
         when(tareaService.listar()).thenReturn(Collections.singletonList(tarea));
 
@@ -59,19 +55,11 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].titulo", is("Ver tarea")))
-<<<<<<< HEAD
-                .andExpect(jsonPath("$[0].completado", is(true)));
-=======
                 .andExpect(jsonPath("$[0].completado", is(false)));
->>>>>>> a5e0d1189bdbee081235eb0ed69246965b840a29
     }
 
     @Test
     void testActualizarTarea() throws Exception {
-<<<<<<< HEAD
-        Task original = new Task(1L, "Vieja", false);
-=======
->>>>>>> a5e0d1189bdbee081235eb0ed69246965b840a29
         Task actualizada = new Task(1L, "Nueva", true);
 
         when(tareaService.actualizar(any(Long.class), any(Task.class)))
