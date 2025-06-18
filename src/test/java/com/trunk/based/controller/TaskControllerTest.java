@@ -60,7 +60,7 @@ class TaskControllerTest {
 
     @Test
     void testActualizarTarea() throws Exception {
-        Task actualizada = new Task(1L, "Nueva", false);
+        Task actualizada = new Task(1L, "Nueva", true);
 
         when(tareaService.actualizar(any(Long.class), any(Task.class)))
                 .thenReturn(Optional.of(actualizada));
@@ -70,6 +70,6 @@ class TaskControllerTest {
                         .content(objectMapper.writeValueAsString(actualizada)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.titulo", is("Nueva")))
-                .andExpect(jsonPath("$.completado", is(false)));
+                .andExpect(jsonPath("$.completado", is(true)));
     }
 }
